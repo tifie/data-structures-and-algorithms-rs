@@ -1,2 +1,1 @@
-mod graph;
-mod math_library;
+mod algorithms;
