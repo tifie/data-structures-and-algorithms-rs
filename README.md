@@ -1,2 +1,3 @@
-# data-structures-and-algorithms-rs
-Atcoder-Library
+# Data Structures And Algorithms in Rust
+
+[AtCoder](https://atcoder.jp/)で使うライブラリです．
