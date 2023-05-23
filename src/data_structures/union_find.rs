@@ -1,3 +1,4 @@
+#[derive(Debug)]
 struct UnionFind {
     parent: Vec<usize>,
     rank: Vec<usize>,
@@ -25,7 +26,7 @@ impl UnionFind {
         }
     }
 
-    fn union(&mut self, x: usize, y: usize) {
+    fn unite(&mut self, x: usize, y: usize) {
         let (root_x, root_y) = (self.find(x), self.find(y));
 
         if root_x != root_y {
@@ -39,6 +40,10 @@ impl UnionFind {
             }
         }
     }
+
+    fn is_same(&mut self, x: usize, y: usize) -> bool {
+        self.find(x) == self.find(y)
+    }
 }
 
 #[cfg(test)]
@@ -47,6 +52,30 @@ mod tests {
 
     #[test]
     fn is_union_find() {
-        todo!();
+        let n = 8;
+        let _q = 9;
+        let query = vec![
+            (0, 1, 2),
+            (0, 3, 2),
+            (1, 1, 3),
+            (1, 1, 4),
+            (0, 2, 4),
+            (1, 4, 1),
+            (0, 4, 2),
+            (0, 0, 0),
+            (1, 0, 0),
+        ];
+
+        let mut uf = UnionFind::new(n);
+        let mut ans = Vec::new();
+
+        for (q, a, b) in query {
+            if q != 1 {
+                uf.unite(a, b);
+            } else {
+                ans.push(if uf.is_same(a, b) { "Yes" } else { "No" });
+            }
+        }
+        assert_eq!(ans, vec!["Yes", "No", "Yes", "Yes"]);
     }
 }

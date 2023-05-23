@@ -1,11 +1,11 @@
-use std::collections::VecDeque;
-
 #[derive(Debug, PartialEq, Eq, Clone)]
 struct Edge<T> {
     src_node: usize,
     dst_node: usize,
     weight: Option<T>,
 }
+
+const INF: usize = 100000;
 
 #[derive(Debug)]
 struct Graph<T> {
@@ -27,25 +27,25 @@ impl<T: Clone> Graph<T> {
         });
     }
 
-    fn bfs(&mut self, start: usize) -> Vec<i32> {
-        let mut dist = vec![-1; self.edges.len()];
-        let mut que = VecDeque::new();
+    fn dfs(&mut self, start: usize) -> Vec<usize> {
+        let mut dist = vec![INF; self.edges.len()];
+        let mut stack = Vec::<usize>::new();
         dist[start] = 0;
-        que.push_back(start);
-
-        while let Some(node) = que.pop_front() {
+        stack.push(start);
+        while let Some(node) = stack.pop() {
             for e in &self.edges[node] {
-                if dist[e.dst_node] != -1 {
+                if dist[e.dst_node] != INF {
                     continue;
                 }
+                stack.push(e.dst_node);
                 dist[e.dst_node] = dist[e.src_node] + 1;
-                que.push_back(e.dst_node);
             }
         }
 
         dist
     }
 }
+
 #[cfg(test)]
 mod tests {
     use std::vec;
@@ -53,7 +53,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn is_bfs() {
+    fn is_dfs() {
         let mut graph: Graph<i32> = Graph::new(9);
         let a: Vec<(usize, usize)> = vec![
             (0, 1),
@@ -76,7 +76,7 @@ mod tests {
             graph.add_edge(a, b, None);
             graph.add_edge(b, a, None);
         }
-        println!("{:?}", graph.bfs(0));
-        assert_eq!(graph.bfs(0), vec![0, 1, 1, 2, 1, 2, 3, 3, 2]);
+        println!("{:?}", graph.dfs(0));
+        assert_eq!(graph.dfs(0), vec![0, 1, 1, 2, 1, 2, 3, 3, 2]);
     }
 }
